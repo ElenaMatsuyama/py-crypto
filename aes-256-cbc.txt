@@ -26,7 +26,7 @@ ciphertext = cipher.encrypt(padded_message)
 print("КАПСУЛА ВРЕМЕНИ: зашифрованное с помощью AES в режиме CBC сообщение в байтовом формате: ", ciphertext)
 print("")
 
-# Преобразуем сообщение из байтового формата в base64
+# Преобразуем результат шифрования в base64
 cipher_base64 = base64.b64encode(ciphertext)
 
 # Вывод на печать зашифрованного сообщения, преобразованного в base64
