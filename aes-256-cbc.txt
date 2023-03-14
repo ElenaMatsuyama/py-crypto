@@ -1,0 +1,44 @@
+from Crypto.Cipher import AES
+from Crypto.Random import get_random_bytes
+from Crypto.Util.Padding import pad, unpad
+import base64
+
+# Задаем сообщение и ключ шифрования
+message = "non scholae, sed vitae discimus"
+key = b"dreamteam1234567dreamteam1234567"  # ключ длиной 32 байта
+
+print("КАПСУЛА ВРЕМЕНИ: оригинальное сообщение: ", message)
+print("")
+
+# Генерируем вектор инициализации длиной 16 байт
+iv = get_random_bytes(16)
+
+# Создаем объект шифрования AES с режимом CBC
+cipher = AES.new(key, AES.MODE_CBC, iv=iv)
+
+# Добавляем дополнение до кратности длине блока шифра AES в режиме CBC
+padded_message = pad(message.encode(), AES.block_size)
+
+# Шифруем сообщение
+ciphertext = cipher.encrypt(padded_message)
+
+# Вывод зашифрованного текста на экран
+print("КАПСУЛА ВРЕМЕНИ: зашифрованное с помощью AES в режиме CBC сообщение в байтовом формате: ", ciphertext)
+print("")
+
+# Преобразуем сообщение из байтового формата в base64
+cipher_base64 = base64.b64encode(ciphertext)
+
+# Вывод на печать зашифрованного сообщения, преобразованного в base64
+print("КАПСУЛА ВРЕМЕНИ: зашифрованное сообщение себе в кодировке base64: ", cipher_base64)
+print("")
+
+# Расшифровываем сообщение
+# Для этого (1) сначала возващаем в байтовую строку из base 64
+ciphertext_decode = base64.b64decode(cipher_base64)
+
+# (2) Расшифровываем с помощью AES и удаляем дополнение
+cipher_decrypt = AES.new(key, AES.MODE_CBC, iv=iv)
+decrypted_padded_message = cipher_decrypt.decrypt(ciphertext_decode)
+plaintext = unpad(decrypted_padded_message, AES.block_size)
+print("КАПСУЛА ВРЕМЕНИ: первоначальное не зашифрованное сообщение: ", plaintext.decode())
